@@ -32,18 +32,10 @@ String esp01cmd(String cmd) {
   delay(10);
   String risposta = check4answer(); //verifico la risposta del modulo WIFI
   return risposta; //restituisco la risposta del modulo WIFI
+}  
     
-   //Invia comandi al modulo WIFI (esp01)
-//riceve il comando da inviare (nella stringa cmd)
-//aspetta e restituisce la risposta del modulo WIFI
-String esp01cmd(String cmd) {
-  Serial.println("sending: " + cmd); //stampo su Monitor Seriale il comando che viene inviato al modulo WIFI (DEBUG)
-  serialModuloWIFI.println(cmd); //invio il comando al moduloWIFI
-  delay(10);
-  String risposta = check4answer(); //verifico la risposta del modulo WIFI
-  return risposta; //restituisco la risposta del modulo WIFI 
-    
-}
+
+
 
 void setup()  {
     // Define pin modes for TX and RX
@@ -51,7 +43,7 @@ void setup()  {
     // pinMode(txPin, OUTPUT);
     
     // Set the baud rate for the SoftwareSerial object
-    serialModuloWIFI.begin(115200);
+    serialModuloWIFI.begin(9600);
     Serial.begin(9600);
     delay(1000);
     
@@ -82,6 +74,13 @@ void loop() {
 
     Serial.println("Connection from remote device was Established!!!");
 
+//codice per ricavare l'indirizzo IP e memorizzarlo nella variabile "cellphoneIP"
+String str = esp01cmd("AT+CWLIF");
+int startOfSTR = str.indexOf(',',18); //IP finsce prima della virgola
+String cellphoneIP = str.substring(11,startOfSTR);
+
+
+    
     //Socket ID: 3
     //accept packets from any IP address/devices
     //Listen to local port 4567
@@ -99,7 +98,19 @@ void loop() {
         Serial.println("Received: "+str.substring(startOfSTR));
         //Serial.println("Received: "+str);
         //Serial.println(startOfSTR);
+    //dati ricevuti da Monitor Seriale
       }
+
+cellphoneIP="192.168.4.5";
+ str = Serial.readString();
+if(str != ""){
+    Serial.println("Received from Serial Monitor"+str);
+//String str1 = "AT+CIPSEND=1,"+str.length(); NOT WORKING??? bug???
+String str1 = "AT+CIPSEND=3,"+str.length();
+str1 += ","+cellphoneIP+",1234";
+//str1 = str1 + str.length()+"/";
+Serial.println("Received from Serial Monitor"+str1);
+}
     }
 
 }
