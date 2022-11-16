@@ -101,13 +101,21 @@ String cellphoneIP = str.substring(11,startOfSTR);
     //dati ricevuti da Monitor Seriale
       }
 
-cellphoneIP="192.168.4.5";
+
+
+//cellphoneIP="192.168.4.4";
  str = Serial.readString();
 if(str != ""){
+  int lunghezzaSTringa=str.length();
     Serial.println("Received from Serial Monitor"+str);
 //String str1 = "AT+CIPSEND=1,"+str.length(); NOT WORKING??? bug???
-String str1 = "AT+CIPSEND=3,"+str.length();
-str1 += ","+cellphoneIP+",1234";
+String str1 = "AT+CIPSEND=3,";
+str1.concat(lunghezzaSTringa);
+str1.concat(",\"");
+str1.concat(cellphoneIP);
+str1.concat("\",1234");
+esp01cmd(str);
+  Serial.println(str);
 //str1 = str1 + str.length()+"/";
 Serial.println("Received from Serial Monitor"+str1);
 }
