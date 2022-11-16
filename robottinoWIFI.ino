@@ -32,6 +32,17 @@ String esp01cmd(String cmd) {
   delay(10);
   String risposta = check4answer(); //verifico la risposta del modulo WIFI
   return risposta; //restituisco la risposta del modulo WIFI
+    
+   //Invia comandi al modulo WIFI (esp01)
+//riceve il comando da inviare (nella stringa cmd)
+//aspetta e restituisce la risposta del modulo WIFI
+String esp01cmd(String cmd) {
+  Serial.println("sending: " + cmd); //stampo su Monitor Seriale il comando che viene inviato al modulo WIFI (DEBUG)
+  serialModuloWIFI.println(cmd); //invio il comando al moduloWIFI
+  delay(10);
+  String risposta = check4answer(); //verifico la risposta del modulo WIFI
+  return risposta; //restituisco la risposta del modulo WIFI 
+    
 }
 
 void setup()  {
